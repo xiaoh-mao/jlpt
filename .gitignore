@@ -1,0 +1,11 @@
+# 运行时生成：Edge 独立配置、做题记录和进度（调试实例的在 scratch/testdata）
+/.window/
+/data/
+scratch/testdata/
+# 自己导入的卷子
+papers/自备/
+# 原版 PDF：做题只用页面图和录音，PDF 只有生成数据的脚本读；要用就跑 scratch/download.sh 再下
+papers/**/*.pdf
+__pycache__/
+*.bak
+*.part
