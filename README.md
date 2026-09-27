@@ -1,9 +1,9 @@
-# JLPT 做题
+# JLPT 模考
 
 桌面刷题工具，题目来自官方《日本語能力試験公式問題集》
 （2012 年版和 2018 年第二集），N1–N5 每级两套，共 10 套。
 卷子是原版页面，听力是原版录音，正确答案来自官方正答表。
-姊妹项目：[TOPIK 做题](https://github.com/xiaoh-mao/topik)（界面和用法一样）。
+姊妹项目：[TOPIK 模考](https://github.com/xiaoh-mao/topik)（界面和用法一样）。
 
 ## 下载
 
@@ -20,7 +20,7 @@
 
 ## 怎么用
 
-1. 双击 **`JLPT做题.bat`**，会弹出一个独立窗口（Edge 应用模式）。
+1. 双击 **`JLPT模考.bat`**，会弹出一个独立窗口（Edge 应用模式）。
    想要带图标的桌面快捷方式，就在这个文件夹里运行
    `powershell -ExecutionPolicy Bypass -File scratch\make-ico.ps1 -Shortcut`。
 2. 在首页右上角选级别（N1–N5），选一套卷子，点「整套模考」，
@@ -78,8 +78,8 @@
 
 | 路径 | 内容 |
 |---|---|
-| `JLPT做题.bat` | 启动入口 |
-| `app/` | 界面（纯前端，零依赖）；`core.*` 和 TOPIK 做题共用，`exam.*` 是 JLPT 自己的 |
+| `JLPT模考.bat` | 启动入口 |
+| `app/` | 界面（纯前端，零依赖）；`core.*` 和 TOPIK 模考共用，`exam.*` 是 JLPT 自己的 |
 | `lib/` | 本地小服务（PowerShell）和启动脚本；`exam.ps1` 是 JLPT 自己的 |
 | `papers/` | 官方卷的页面图和录音；`自备/` 放自己的卷子。原版 PDF 做题用不上，不在仓库里 |
 | `data/` | 做题记录和没交卷的进度（第一次运行时自动建） |

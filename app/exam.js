@@ -1,5 +1,5 @@
 'use strict';
-/* JLPT 做题 —— 考试适配（界面和做法全在 core.js，两个 app 共用）。这里只有 JLPT 自己的：
+/* JLPT 模考 —— 考试适配（界面和做法全在 core.js，两个 app 共用）。这里只有 JLPT 自己的：
    官方卷：答案 data/keys.js（脚本从正答表生成），每题在卷子/听力原文里的位置和录音里的秒数 data/tests.js，
    听力原文的中文译文 data/trans.js，考试结构和合格线 data/levels.js；
    自备卷：papers/自备/<名字>/ 下的 PDF + MP3 + test.json（答案），用「导入自备试卷」设置，卷子用 PDF 原样显示。
@@ -128,7 +128,7 @@ function score(test, set, answers) {
 }
 
 Object.assign(EXAM, {
-  name: 'JLPT 做题', lang: 'ja', levels: LV, defaultLevel: 'N2',
+  name: 'JLPT 模考', lang: 'ja', levels: LV, defaultLevel: 'N2',
   docNames: { ...PN, script: '听力原文', answer: '正答表' },
   typesInTl: true,
   brand: '<span>日本語能力試験 · 官方公式問題集</span>',

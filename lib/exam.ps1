@@ -1,6 +1,6 @@
-﻿# JLPT 做题 —— 本地服务里 JLPT 自己的部分，由 lib\server.ps1（内核）dot-source 进来。
-$Title = 'JLPT 做题'     # 必须和 app\exam.js 的 EXAM.name 一致（那是窗口标题），AppActivate 靠它找窗口
-$Ports = 8830..8849      # 默认端口段（TOPIK 做题用 8860–8879，错开）；调试实例用 8850
+﻿# JLPT 模考 —— 本地服务里 JLPT 自己的部分，由 lib\server.ps1（内核）dot-source 进来。
+$Title = 'JLPT 模考'     # 必须和 app\exam.js 的 EXAM.name 一致（那是窗口标题），AppActivate 靠它找窗口
+$Ports = 8830..8849      # 默认端口段（TOPIK 模考用 8860–8879，错开）；调试实例用 8850
 
 # papers\自备\<名字>\ 下的文件清单 + test.json（答案），给「导入自备试卷」用
 function Get-CustomList {
