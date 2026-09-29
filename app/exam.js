@@ -2,6 +2,7 @@
 /* JLPT 模考 —— 考试适配（界面和做法全在 core.js，两个 app 共用）。这里只有 JLPT 自己的：
    官方卷：答案 data/keys.js（脚本从正答表生成），每题在卷子/听力原文里的位置和录音里的秒数 data/tests.js，
    听力原文的中文译文 data/trans.js，考试结构和合格线 data/levels.js；
+   外挂题包：仓库外的同级文件夹 jlpt-历年真题\ 有 pack.js 就加载（见 loadExtra），没有照常用；
    自备卷：papers/自备/<名字>/ 下的 PDF + MP3 + test.json（答案），用「导入自备试卷」设置，卷子用 PDF 原样显示。
    算分：得点区分按正确率线性估算（真考试是等化计分）。 */
 
@@ -82,6 +83,29 @@ function loadOfficial() {
   }
 }
 
+// 外挂题包：仓库外的同级文件夹 jlpt-历年真题\（lib\exam.ps1 把它的文件发在 /api/extra/ 下），没有就跳过。
+// 它的 pack.js 定义 window.JLPT_EXTRA = { note: 首页来源说明后面加的一句, tests: [addJlpt() 的参数…] }，
+// 格式跟本仓库 data/*.js 一样，地址（img、audio）相对题包根目录。题包由它自己的脚本生成：改了 addJlpt 的参数或数据格式，那边要跟着重新生成。
+const EXTRA = '/api/extra/';
+async function loadExtra() {
+  const ok = await new Promise(res => {
+    const el = document.createElement('script');
+    el.src = EXTRA + 'pack.js';
+    el.onload = () => res(true);
+    el.onerror = () => res(false);
+    document.head.appendChild(el);
+  });
+  const X = window.JLPT_EXTRA;
+  if (!ok || !Array.isArray(X?.tests)) return;
+  for (const t of X.tests) {
+    try {
+      const audio = Object.fromEntries(Object.entries(t.audio || {}).map(([m, u]) => [m, EXTRA + u]));
+      addJlpt({ ...t, img: EXTRA + t.img, audio, files: {} });
+    } catch (e) { console.warn('题包里的卷子读不了', t.id, e); }
+  }
+  if (X.note) EXAM.srcNote += `<br>${esc(X.note)}`;
+}
+
 // 自备试卷：papers/自备/<名字>/test.json
 async function loadCustom() {
   let list = [];
@@ -137,7 +161,7 @@ Object.assign(EXAM, {
     <a href="https://www.jlpt.jp/samples/sampleindex.html" target="_blank">jlpt.jp</a> 免费公开的《日本語能力試験公式問題集》，每级两套，均选自 2010 年以后的真题。
     分数是按正确率线性估算的，真考试用等化计分，仅供参考。`,
   levelInfo: lv => `满分 ${lv.scores.reduce((s, a) => s + a.max, 0)} · 合格线 ${lv.pass}，各得点区分基准点 ${lv.scores.map(s => s.min).join(' / ')}`,
-  load: async () => { loadOfficial(); await loadCustom(); },
+  load: async () => { loadOfficial(); await loadExtra(); await loadCustom(); },
   score,
 });
 

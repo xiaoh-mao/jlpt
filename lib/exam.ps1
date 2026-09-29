@@ -1,6 +1,8 @@
 ﻿# JLPT 模考 —— 本地服务里 JLPT 自己的部分，由 lib\server.ps1（内核）dot-source 进来。
 $Title = 'JLPT 模考'     # 必须和 app\exam.js 的 EXAM.name 一致（那是窗口标题），AppActivate 靠它找窗口
 $Ports = 8830..8849      # 默认端口段（TOPIK 模考用 8860–8879，错开）；调试实例用 8850
+# 外挂题包：仓库外的同级文件夹（不在本仓库，没有也照常用），它的文件发在 /api/extra/ 下，app\exam.js 的 loadExtra 读
+$script:ExtraDir = Join-Path (Split-Path -Parent $script:Root) 'jlpt-历年真题'
 
 # papers\自备\<名字>\ 下的文件清单 + test.json（答案），给「导入自备试卷」用
 function Get-CustomList {
@@ -31,6 +33,16 @@ function Invoke-ExamRoute($Ctx, [string]$Path) {
     } else {
       Send-Text $Ctx (ConvertTo-Json -InputObject @(Get-CustomList) -Depth 5 -Compress)
     }
+    return $true
+  }
+  if ($Path.StartsWith('/api/extra/')) {
+    $file = Get-SafePath $script:ExtraDir $Path.Substring(11)
+    if ($Path -eq '/api/extra/pack.js' -and -not ($file -and (Test-Path -LiteralPath $file))) {
+      Send-Text $Ctx '' 'application/javascript; charset=utf-8'    # 没有题包：给个空脚本，控制台不报 404
+      return $true
+    }
+    $cache = if ($Path.EndsWith('.js')) { 'no-cache' } else { 'max-age=86400' }   # pack.js 重新生成后要马上生效
+    Send-File $Ctx $file $cache
     return $true
   }
   if ($Path -eq '/api/open-folder') {

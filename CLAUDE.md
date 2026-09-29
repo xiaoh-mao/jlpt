@@ -10,6 +10,8 @@
   共用文件（清单是 `lib/sync-core.ps1` 的 `$Files`）两边必须一模一样：改哪边都行，改完跑 `pwsh -File lib\sync-core.ps1`
   复制到另一边（两边都改过会报冲突），再两边各自提交。只属于 JLPT 的（读数据、算分、说明文字、导入自备卷）放
   `app/exam.*` `lib/exam.ps1`；`app/data/` 文件名两边一样、格式各管各的。两边 `README.md` 的界面说明是平行写的，改界面两边一起改。
+- **外挂题包**：同级文件夹 `jlpt-历年真题\`（不在仓库、不上传，有自己的 CLAUDE.md）。挂钩只有 `lib/exam.ps1` 的 `/api/extra/`
+  和 `app/exam.js` 的 `loadExtra`，它不在就当没有；它的 `pack.js` 就是 `addJlpt()` 的参数，改了这个或 `app/data/` 的格式，那边要重新生成。
 - 仓库带着 `papers/` 的页面图和 mp3（做题只用这些），不带原版 PDF 和 `papers/自备/`（`.gitignore`）；
   PDF 只有流水线读，要重新生成数据先跑 `sh scratch/download.sh` 再下，再跑 `render.py`。
 
